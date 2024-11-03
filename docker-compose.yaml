@@ -1,0 +1,62 @@
+services:
+  coachlinx-backend:
+    # 生成するイメージ名
+    image: php:8.2-fpm
+    # 生成するコンテナ名
+    container_name: coachlinx-backend
+    # dockerイメージビルド時の処理
+    build: 
+      context: .
+      dockerfile: ./docker/php/Dockerfile
+    hostname: localhost
+    # ポートマッピング設定（ホストPCのポート：コンテナ内のポート）
+    ports:
+      - "8000:8000" 
+    # マウンティングの設定 （ホストPCのパス：コンテナ内のパス）
+    volumes:
+      - ./:/var/www/html
+    # 環境変数の設定
+    environment:
+      TZ: Asia/Tokyo
+    # 接続するネットワーク 
+    networks:
+      - coachlinxnetwork
+
+  coachlinx-nginx:
+    image: nginx:latest
+    container_name: coachlinx-nginx
+    ports:
+      - "80:80" # HTTP
+      - "443:443" # HTTPS
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - coachlinx-backend
+    networks:
+      - coachlinxnetwork
+
+  coachlinx-db:
+    # 生成するイメージ名
+    image: postgres:latest
+    # 生成するコンテナ名
+    container_name: coachlinx-db
+    hostname: localhost
+    ports:
+      - "5432:5432"
+    environment:
+      MYSQL_DATABASE: coachlinx
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: coachlinx
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - ./docker/postgres/pgdata:/var/lib/postgresql/data
+    privileged: true
+    networks:
+      - coachlinxnetwork
+
+networks:
+  coachlinxnetwork:
+    driver: bridge
+#     ipam:
+#       driver: default

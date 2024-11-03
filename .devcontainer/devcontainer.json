@@ -1,0 +1,35 @@
+{
+    // VSCode上で表示される名前
+    "name": "coachlinx-backend",
+    // docker-composeファイルのパス
+    "dockerComposeFile": "../docker-compose.yaml",
+    // docker-composeのサービス
+    "service": "colorfill-backend",
+    // VSCodeのルートディレクトリ
+    "workspaceFolder": "/var/www/html",
+    "customizations": {
+    // カスタマイズ
+    "vscode": {
+        // devcontainer内で利用する拡張機能一覧(以下の拡張機能は、devcontainer内でデフォルトで使える。各自個別に拡張機能を入れることも可能)
+        // TODO：不要な拡張機能の削除（特に、Extension Packの使ってなさそうなやつ）
+        "extensions": [
+            "ms-azuretools.vscode-docker",// docker
+            "vscjava.vscode-java-pack",// Extension Pack for Java
+            "MS-CEINTL.vscode-language-pack-ja",// Japanese Language Pack for Visual Studio Code
+            "vmware.vscode-boot-dev-pack",// Spring Boot Extension Pack
+            "shengchen.vscode-checkstyle",// Checkstyle for Java(linter：ソースコードを静的に解析して、コード内のエラーや潜在的なバグ、スタイルの不一致などを指摘するツール、の拡張機能)
+        ],
+        "settings": {
+            "java.jdt.ls.java.home": "/usr/lib/jvm/msopenjdk-21",
+            "maven.home": "/usr/bin/mvn",
+            "java.checkstyle.configuration": "google_checks.xml",// linterの設定ファイルを指定
+            "java.checkstyle.autocheck": true,
+            "java.format.settings.url": "java-google-style.xml",// formatterの設定ファイルを指定
+            "java.format.settings.profile": "GoogleStyle",// formatter名
+            "[java]": {
+                "editor.formatOnSave": true,// ファイル保存時に自動でformatterを走らせるための設定
+            },
+        }
+    }
+  },
+}
